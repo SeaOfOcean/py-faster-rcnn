@@ -23,24 +23,16 @@ import scipy.io as sio
 import caffe, os, sys, cv2
 import argparse
 
-CLASSES = ('__background__',
-           'aeroplane', 'bicycle', 'bird', 'boat',
-           'bottle', 'bus', 'car', 'cat', 'chair',
-           'cow', 'diningtable', 'dog', 'horse',
-           'motorbike', 'person', 'pottedplant',
-           'sheep', 'sofa', 'train', 'tvmonitor')
+CLASSES = ('__background__', 'bus', 'car',
+           'motorbike', 'person')
 
-#CLASSES = ('__background__',
-#           'bicycle',
-#           'bus', 'car',
-#           'motorbike', 'person')
 NETS = {'vgg16': ('VGG16',
                   'VGG16_faster_rcnn_final.caffemodel'),
         'zf': ('ZF',
                   'ZF_faster_rcnn_final.caffemodel')}
 
 
-def vis_detections(im, class_name, image_name, dets, thresh=0.5):
+def vis_detections(im, class_name, dets, thresh=0.5):
     """Draw detected bounding boxes."""
     inds = np.where(dets[:, -1] >= thresh)[0]
     if len(inds) == 0:
@@ -71,8 +63,6 @@ def vis_detections(im, class_name, image_name, dets, thresh=0.5):
     plt.axis('off')
     plt.tight_layout()
     plt.draw()
-    if class_name == 'car' or class_name == 'person':
-        plt.savefig('demo_output/res_' + image_name[:-4] + '_' + class_name + '.jpg')
 
 def demo(net, image_name):
     """Detect object classes in an image using pre-computed object proposals."""
@@ -100,7 +90,7 @@ def demo(net, image_name):
                           cls_scores[:, np.newaxis])).astype(np.float32)
         keep = nms(dets, NMS_THRESH)
         dets = dets[keep, :]
-        vis_detections(im, cls, image_name, dets, thresh=CONF_THRESH)
+        vis_detections(im, cls, dets, thresh=CONF_THRESH)
 
 def parse_args():
     """Parse input arguments."""
@@ -153,5 +143,5 @@ if __name__ == '__main__':
         print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
         print 'Demo for {}'.format(im_name)
         demo(net, im_name)
-    
-    # plt.show()
+
+    plt.show()

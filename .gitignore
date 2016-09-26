@@ -3,3 +3,9 @@
 lib/build
 lib/pycocotools/_mask.c
 lib/pycocotools/_mask.so
+output/default/
+data/backup/
+data/faster_rcnn_models/
+data/imagenet_models/
+data/Pedestrain/
+demo_output/
